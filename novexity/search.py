@@ -66,8 +66,12 @@ def search(query: str):
         ) if result.select_one('h3') else ''
         link = unquote(result.select_one('a')['href'].split("&")[0].replace(
             "/url?q=", "")) if result.select_one('a') else ''
-        displayed_link = result.select_one(
-            '.TbwUpd').get_text() if result.select_one('.TbwUpd') else ''
+
+        # Adjusting the displayed_link extraction
+        displayed_link_parts = result.select_one('.TbwUpd')
+        displayed_link = " ".join(
+            displayed_link_parts.stripped_strings) if displayed_link_parts else ''
+
         favicon = result.select_one('.eqA2re.NjwKYd img')[
             'src'] if result.select_one('.eqA2re.NjwKYd img') else ''
 
@@ -92,7 +96,6 @@ def search(query: str):
         }
 
         search_results.append(result_dict)
-
     gateway.shutdown()
 
     return {
