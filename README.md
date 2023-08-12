@@ -35,7 +35,7 @@ GOOGLE_SEARCH_AWS_SECRET_ACCESS_KEY=your_secret_access_key
 Use the `search` function to get Google search results:
 
 ```python
-from nexus_nova.google_search import search
+from novexity.google_search import search
 results = search("Your Query Here")
 ```
 
