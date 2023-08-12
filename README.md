@@ -20,7 +20,7 @@
 <h2 align="left">⚙ Installation</h2>
 
 ```bash
-pip install NexusNova
+pip install Novexity
 ```
 
 <h2 align="left">📝 Usage</h2>
