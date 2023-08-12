@@ -37,6 +37,7 @@ Use the `search` function to get Google search results:
 ```python
 from novexity.google_search import search
 results = search("Your Query Here")
+print(results)
 ```
 
 <h2 align="left">🤝 Contributing</h2>
