@@ -1,4 +1,4 @@
-<h1 align="center">NexusNova</h1>
+<h1 align="center">Novexity</h1>
 <div align="center">
     <img src="https://github.com/NorkzYT/NexusAPI/assets/53381649/2a2634c0-ada0-4795-ba5b-bdc60414baa9" width="200">
 </div>

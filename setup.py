@@ -1,13 +1,13 @@
 """
-Setup script for the NexusNova package.
+Setup script for the Novexity package.
 
-This script facilitates the installation and distribution of the NexusNova package,
+This script facilitates the installation and distribution of the Novexity package,
 which is designed to scrape Google Search Results efficiently.
 """
 from setuptools import setup, find_packages
 
 setup(
-    name='NexusNova',
+    name='Novexity',
     version='1.0',
     packages=find_packages(),
     install_requires=[

@@ -1,24 +1,24 @@
 """
-Unit tests for the `nexus_nova.google_search` module.
+Unit tests for the `novexity.google_search` module.
 
 This module contains tests that verify the functionality of the `search` function
-within the `nexus_nova.google_search` module.
+within the `novexity.google_search` module.
 """
 
 import unittest
 from unittest.mock import patch
-from nexus_nova.google_search import search
+from novexity.google_search import search
 
 
 class TestGoogleSearch(unittest.TestCase):
     """
-    Test cases for the `search` function of the `nexus_nova.google_search` module.
+    Test cases for the `search` function of the `novexity.google_search` module.
 
     This class mocks the responses from Google to verify that the `search` function
     correctly parses and returns search results.
     """
 
-    @patch('nexus_nova.google_search.requests.Session.get')
+    @patch('novexity.google_search.requests.Session.get')
     def test_search_successful(self, mock_get):
         """Test that the `search` function correctly parses a mock Google result."""
         # Mocking the response from Google
