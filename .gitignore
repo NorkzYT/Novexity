@@ -1,0 +1,8 @@
+# Modules
+node_modules
+
+# Cache
+__pycache__
+
+# Environment variables
+.env

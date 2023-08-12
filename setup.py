@@ -1,0 +1,24 @@
+"""
+Setup script for the NexusNova package.
+
+This script facilitates the installation and distribution of the NexusNova package,
+which is designed to scrape Google Search Results efficiently.
+"""
+from setuptools import setup, find_packages
+
+setup(
+    name='NexusNova',
+    version='1.0',
+    packages=find_packages(),
+    install_requires=[
+        'beautifulsoup4',
+        'requests',
+        'python-dotenv',
+        'requests_ip_rotator'
+    ],
+    author='Richard Lora',
+    description='Scrape Google Search Results Fast and Easy.',
+    long_description=open('README.md', encoding='utf-8').read(),
+    long_description_content_type='text/markdown',
+    url='https://github.com/yourgithubusername/google_search_pkg'
+)
