@@ -162,11 +162,9 @@ Output:
 
 1. 🍴 Fork the repo!
 
-2. 🧪 Run the tests to ensure everything is working: `python -m unittest tests.test_google_search`
+2. 🔧 Make your changes.
 
-3. 🔧 Make your changes.
-
-4. 📦 Push your changes to a new branch and create a Pull Request.
+3. 📦 Push your changes to a new branch and create a Pull Request.
 
 Every contribution is welcome! 💖
 
