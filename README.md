@@ -40,9 +40,9 @@ Example usage:
 
 ```python
 from dotenv import load_dotenv
-from novexity import search
-
 load_dotenv()
+
+from novexity import search
 
 # Call the search function
 formatted_json_string, returned_gateway = search(

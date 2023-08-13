@@ -5,10 +5,6 @@ import requests
 from bs4 import BeautifulSoup
 from requests_ip_rotator import ApiGateway
 
-# Load environment variables from .env file
-from dotenv import load_dotenv
-load_dotenv()
-
 aws_access_key_id = os.getenv('GOOGLE_SEARCH_AWS_ACCESS_KEY_ID')
 aws_access_key_secret = os.getenv('GOOGLE_SEARCH_AWS_SECRET_ACCESS_KEY')
 
