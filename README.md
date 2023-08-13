@@ -4,7 +4,7 @@
 </div>
 
 <h4 align="center">Open Source SerpAPI Google Search Alternative 🌐</h4>
-<h5 align="center">Scrape Google Search Results Fast and Easy ✨</h5>
+<h5 align="center">Freely Scrape Google Search Results Fast and Easy ✨</h5>
 
 <div align="center">
 
@@ -27,7 +27,7 @@ pip install Novexity
 
 Make an AWS account and create a new IAM user with the permission of `AmazonAPIGatewayAdministrator`. Then, to find your access key ID and secret access key, follow the [official AWS tutorial](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html).
 
-Set up your AWS credentials in a `.env` file or with [awscli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) by running `aws configure``.
+Set up your AWS credentials in your `.env` file or with [awscli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) by running `aws configure`.
 
 ```env
 GOOGLE_SEARCH_AWS_ACCESS_KEY_ID=your_access_key_id
@@ -46,7 +46,7 @@ from novexity import search
 
 # Call the search function
 formatted_json_string, returned_gateway = search(
-    "Time", 'position', 'title', 'link', 'description', 'source')
+    "Time",)
 
 # Print the formatted JSON string
 print(formatted_json_string)
