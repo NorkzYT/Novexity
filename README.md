@@ -60,7 +60,7 @@ Please remember that if gateways are not shutdown via the `shutdown()` method, y
 
 ### 🎯 Filtering Fields
 
-🔍 You can filter events based on specific fields, if you do not choose any to filter with then all will appear in output. Here are the available fields:
+🔍 You can filter info based on specific fields, if you do not choose any to filter with then all will appear in output. Here are the available fields:
 
 - `position`
 - `title`

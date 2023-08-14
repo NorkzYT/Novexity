@@ -14,8 +14,6 @@ if not aws_access_key_id or not aws_access_key_secret:
         "Ensure both GOOGLE_SEARCH_AWS_ACCESS_KEY_ID and GOOGLE_SEARCH_AWS_SECRET_ACCESS_KEY"
         " are set in the .env file or system environment variables.")
 
-TIMEOUT = 1  # Set this to an appropriate value
-
 
 def format_json_output(data):
     """
@@ -63,7 +61,7 @@ def search(query: str, *fields):
     try:  # Start of the try block
         while True:
             try:
-                response = session.get(url, headers=headers, timeout=TIMEOUT)
+                response = session.get(url, headers=headers)
                 if response.status_code == 200:
                     print('Received a 200 OK response!')
                     break
@@ -98,7 +96,8 @@ def search(query: str, *fields):
         fetch_snippet = 'snippet' in fields or fetch_all
         fetch_source = 'source' in fields or fetch_all
 
-        for index, result in enumerate(soup.select('div.tF2Cxc')):
+        position = 0
+        for index, result in enumerate(soup.select('.g')):
             # Here we build the result_dict based on the fields requested:
             result_dict = {}
 
@@ -107,8 +106,10 @@ def search(query: str, *fields):
             if fetch_title and result.select_one('h3'):
                 result_dict["title"] = result.select_one('h3').get_text()
             if fetch_link and result.select_one('a'):
-                result_dict["link"] = unquote(result.select_one(
-                    'a')['href'].split("&")[0].replace("/url?q=", ""))
+                anchor_tag = result.select_one('a')
+                if anchor_tag.has_attr('href'):
+                    result_dict["link"] = unquote(anchor_tag['href'].split("&")[
+                                                  0].replace("/url?q=", ""))
             if fetch_displayed_link:
                 displayed_link_parts = result.select_one('.TbwUpd')
                 if displayed_link_parts:
@@ -133,7 +134,12 @@ def search(query: str, *fields):
                 if source_element:
                     result_dict["source"] = source_element.get_text()
 
-            search_results.append(result_dict)
+            if not any(existing_result.get("link") == result_dict.get("link") and
+                       existing_result.get("title") == result_dict.get("title")
+                       for existing_result in search_results):
+                position += 1
+                result_dict["position"] = position
+                search_results.append(result_dict)
 
         # Create a dictionary to store the final JSON result
         json_result = {
