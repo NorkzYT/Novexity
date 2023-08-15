@@ -39,17 +39,23 @@ GOOGLE_SEARCH_AWS_SECRET_ACCESS_KEY=your_secret_access_key
 Example usage:
 
 ```python
+import os
+from novexity import search, configure
 from dotenv import load_dotenv
 load_dotenv()
 
-from novexity import search
+AWS_ACCESS_KEY_ID = os.getenv('GOOGLE_SEARCH_AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('GOOGLE_SEARCH_AWS_SECRET_ACCESS_KEY')
+configure(aws_access_key_id=AWS_ACCESS_KEY_ID,
+          aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
 
 # Call the search function
-formatted_json_string, returned_gateway = search(
-    "Time",)
+novexity, returned_gateway = search(
+    "Time")
 
-# Print the formatted JSON string
-print(formatted_json_string)
+# Save the results to search.json
+with open("google-search.json", "w", encoding="utf-8") as file:
+    file.write(novexity)
 
 # Shut down the gateways
 returned_gateway.shutdown()
@@ -58,27 +64,6 @@ returned_gateway.shutdown()
 
 Please remember that if gateways are not shutdown via the `shutdown()` method, you may be charged in the future.
 
-### 🎯 Filtering Fields
-
-🔍 You can filter info based on specific fields, if you do not choose any to filter with then all will appear in output. Here are the available fields:
-
-- `position`
-- `title`
-- `link`
-- `displayed_link`
-- `favicon`
-- `description`
-- `snippet`
-- `source`
-
-🌟 **Example use**:
-
-```python
-# Call the search function with the fields you want to filter with
-formatted_json_string, returned_gateway = search(
-    "Time", 'position', 'title', 'link', 'description', 'source')
-```
-
 Output:
 
 ```json
@@ -86,76 +71,107 @@ Output:
   "organic_results": [
     {
       "position": 1,
-      "title": "TIME | Current & Breaking News | National & World Updates",
-      "link": "https://time.com/",
-      "displayed_link": "Time Magazine https://time.com",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAV1BMVEXpBgbpBATpAwPpAgLwWVn0hYXzfX3zdnbzdHTycHDybW30gYH3pqb////pDQ3ya2v97e3+8vLuR0fsJCT84eH96OjsKCjsLi7vUVHuPDztNDTxX1/xZma8Pt5HAAAAhklEQVR4Ae3TRRLEIAAAQdxhNZ7/fzPuLtdMFOgqToBDQYTwLIRgBwhlvEhIKZVSxVvwIk06YOxiBjQ5JV917G3thzYDzjrwBbju97fW85uBI64HdbACAWqmww74iwBEDWiagaZV8AB4EzwA4hpgtALipDoXOoxXQFScljQtnu/qFk0InCgHwCwQIEC0gnAAAAAASUVORK5CYII=",
-      "description": "Breaking news and analysis from TIME.com. Politics, world news, photos, video, tech reviews, health, science and entertainment news.",
-      "snippet": "Breaking news and analysis from TIME.com. Politics, world news, photos, video, tech reviews, health, science and entertainment news.",
-      "source": "https://time.com"
-    },
-    {
-      "position": 2,
       "title": "Time.is - exact time, any time zone",
       "link": "https://time.is/",
       "displayed_link": "Time.is https://time.is",
       "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAVFBMVEVHcEzOMULqFjLrByrxDC3yFTLxACnwFDHuHDakT1jKQlDkITjrEzDrGzXxABwAq6PrDi31b3r//v7wAAj3iZL6vMH81djzO0395OXfHjUAsaDGMD8ufdWhAAAAHHRSTlMAVMLx////zXckOpPo0/8H3v//////////ugp3X9i4HQAAALFJREFUeAG90kUCwzAMAEEFrLJBcvj/7yyEQSm3c16z4W+CMIrVFV6pqzjabGFkgwK1g06Iohhae1xxgMYBVxzFFYQ1TrhCzQK9KEwTWGy4+H6gHfWTaM3CDOxJ3QrN7JKUlwFyQhmz8inlXqMQIKfkc6IkY41ykBDljhmvxEB7T56xZxYXpa9QCAR/CtSzz33AFfbZLwcFiqKyC0qxOO5gEBT2GI0cbViVMGHKCQNfcwEXFBWOnAumeQAAAABJRU5ErkJggg==",
-      "description": "Your clock is 28 minutes and 23.7 seconds behind. Accuracy of synchronization was ±0.005 seconds. Time in New York, United States now: 11:28:29pm.",
-      "snippet": "Your clock is 28 minutes and 23.7 seconds behind. Accuracy of synchronization was ±0.005 seconds. Time in New York, United States now: 11:28:29pm.",
+      "snippet": "Your clock is 38 minutes and 57.8 seconds behind. Accuracy of synchronization was ±0.005 seconds. Time in New York, United States now: 11:39:03am.",
       "source": "https://time.is"
     },
     {
+      "position": 2,
+      "title": "TIME | Current & Breaking News | National & World Updates",
+      "link": "https://time.com/",
+      "displayed_link": "Time Magazine https://time.com",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQMAAABJtOi3AAAABlBMVEX////0DAxCDAtVAAAAAXRSTlMAQObYZgAAAB5JREFUeAFjkP///weEEGA+wIFOMDAfYBg4Qv4HAwCWWB254jDUcwAAAABJRU5ErkJggg==",
+      "snippet": "Breaking news and analysis from TIME.com. Politics, world news, photos, video, tech reviews, health, science and entertainment news.",
+      "source": "https://time.com"
+    },
+    {
       "position": 3,
-      "title": "Time.gov",
-      "link": "https://www.time.gov/",
-      "displayed_link": "time.gov https://www.time.gov",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACFklEQVR4Ae2TA4ydQRSFZ23bthEugtpunNRRGSd1g1qxa9u2jah2G9R+vj03mT+Z5xdVO19yxjP3jIRGo9FoGCJKEX+KESNGZE6ePPn+ggULjnz69Kmn8EBGRkb34ODguwIEBQVdNspMampqOfrHy7bPnHvRHUNK2y2Rlpa2MzIykrKzs2n16tUWIhogXECQ3ZmZmSRAenr6YQTkMs/tDb3Lysoi7kfuUzzGGMfxeB2RkpLyMzc391l7e/vn8vJyWrduncnVBIJswmDDwA7IIY1d5nbU54kA4OChoaEvXXf3PTk5+eD+/fsHDhgw4EdxcbGbCQTZiCCGge2QVbY/hrmfKI5WNF7mEzh3NYBsn3DZ3TfoogB79+7tM3DgQFNJSYlhop96AooBkgam8aLyFKyQXRG3v8HcSaoBvnevBpgdO3YMBCY+iY0bN/4kolY0r8RkVwMGo70JBj5CFKiBINUErsNUXV1NixcvPtvZ2XkmKSnJLg3sgQhzMoVveO0ZCOrbABzaMPC6YkA9CXNZWRkVFRX9xFtxyEVX8CuGifOYu1U+ym2quF32vVFPgOfBwG2hgkHPoUOqAYOtW7cOGTlypL2hoYEweZ4AeLC5WPQADJkwzwKZvcjCV4AptcpmP8DADaGCo03ArmKFF65du9b3xIkTs4nIyWBCQkJSokJhYaFTbiAU8N2Ta2pqwoVGo9Fo/iZ+AX4C+JSMhaGwAAAAAElFTkSuQmCC",
-      "description": "Alaska DAYLIGHT Time. AKDT (UTC-8). 03:25:04 A.M.. Alaska Map. Aleutian DAYLIGHT Time. HADT (UTC-9). 02:25:04 A.M.. Hawaii Standard Time. HST (UTC-10).",
-      "snippet": "Alaska DAYLIGHT Time. AKDT (UTC-8). 03:25:04 A.M.. Alaska Map. Aleutian DAYLIGHT Time. HADT (UTC-9). 02:25:04 A.M.. Hawaii Standard Time. HST (UTC-10).",
-      "source": "https://www.time.gov"
-    },
-    {
-      "position": 4,
-      "title": "Time Definition & Meaning",
-      "link": "https://www.dictionary.com/browse/time",
-      "displayed_link": "Dictionary.com https://www.dictionary.com › browse › time",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABHElEQVR4AWNgUO6+z6DS/X8gMNhuEGNAMS6JUQeMOoAUcP/xx//7Tzz6H1+27b+C/Ux6OwAT1E88Sl0HvP/0nWRHnL/26r+A0STqOOD+kw//C5r3/XeIXvE/oWz7/wnzz4CCHOQwQo6gahSALMWIYwPfBXgd0TDxKNXTACg04OoU7GfhVfv+4w9QVFDXAfPXXkZxACGQULZtQB0ASjMD64ANu27T2QGYiXfAHTDC04B/xga6OgC9FAWpGzgHxJdtHzgHrN8Nzn50dgAi5VNWGy4AWkKaAxBVd0HLPuo0yQIy14MSESEHgFpE4ODOb9kH8jX124QNk46CfIbsALo3SkHtAHi00N8BCAxqFYGy1nBqlo86QLlrwLrnILsBIthS4ofLBq4AAAAASUVORK5CYII=",
-      "description": "Sometimes Time . · a limited period or interval, as between two successive events: a long time. · a particular period considered as distinct from other periods: ...",
-      "snippet": "Sometimes Time . · a limited period or interval, as between two successive events: a long time. · a particular period considered as distinct from other periods: ...",
-      "source": "https://www.dictionary.com › browse › time"
-    },
-    {
-      "position": 5,
-      "title": "Time Definition & Meaning",
-      "link": "https://www.merriam-webster.com/dictionary/time",
-      "displayed_link": "Merriam-Webster https://www.merriam-webster.com › dictionary › time",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAtFBMVEX/////+/v0yszplZfham3eVlrokpT88PDlgIPVAADgXGDspKbspafhZWjkeHvSAADdUVT20tTojZDdS1D429zYHCTbPEH++PjZJi7cQ0jfXWHXCxjrnJ7439/76Onnh4rjcnWesMupudDs8PW1w9jT3Oh6lLqInsDCz9/l6vHt+v/I0uEAGn5jg7AAJ4KSpsQmWZnb4uxSd6gAOolHbaMARo82Y50ANIcATpPwvL10jrZae6tsTasqAAABVElEQVR4Aa2TBY7CQBRAH07dcIcq7ta9/7nWJpkF2myMF6l8N95KoVgqVyrlarFAHrW6oqhVTS8ZimLWyFCy7CIIHMNyX717ihQDNJqt9pO8032N2+s/anhdMhgtJAOlQJaOK/O3iuQwtEYIxh65TEwEooA8FyKyY8F05gPBLMSP4sCP42QeRYu+sBzYsFxF4K/WQLiB7Q7WCaYrQo1hfzhCfFoDnJdcrj430A3RkgEk08OMXXIBiCN/fZgtI7jbUmEWLHfJNjyyPgT78zYJTuu9VJi4sE24nf39BuD7Df+6A/SeSLIC6Z7tB/4KgDSF0xaou6JMheT0LQ1ZiyzDPSRzoFn8v1Ejqw0AdZVc6hM5LCffwUiuW58cWmMk3QoZzBZICk01IxcZSo1us/EUv/W8tEDVmkiVUd0ak6FmKn1Tv9/1etOajMg/Pdew7Z57b/NOvgDpER404SSr2gAAAABJRU5ErkJggg==",
-      "description": "1 of 3. noun · ˈtīm. plural times. Synonyms of time. 1. a. : the measured or measurable period during which an action, process, or condition exists or continues ...",
-      "snippet": "1 of 3. noun · ˈtīm. plural times. Synonyms of time. 1. a. : the measured or measurable period during which an action, process, or condition exists or continues ...",
-      "source": "https://www.merriam-webster.com › dictionary › time"
-    },
-    {
-      "position": 6,
       "title": "Time",
       "link": "https://en.wikipedia.org/wiki/Time",
       "displayed_link": "Wikipedia https://en.wikipedia.org › wiki › Time",
       "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAM1BMVEUAAAD+/v41NTUBAQEAAABZWVknJycWFhaZmZmIiIjp6ellZWXMzMzX19eurq54eHhHR0dExXFyAAAAAXRSTlMAQObYZgAAAPtJREFUeAG8kAWOBDAMA9d1Sin+/7XXbpZZdBaURlMrhx28ycGCD/n0bvkBwJf8C+AoIvRAWGtMyHGtCWkfxW+DRopuuIjUtTQJDStevNoXWaRjRSllLd1O8FFhgEZx2BmkAmHC8HwpOUyxSA50VqOjXgAl50URvNWPBRcAnmwnhbcduthqQCO9KYTFBG7eDWoK1T47AZX9DuiUYT/TuhX3MGpnD51kPprSA9Dl+BCKl7jWHHEHmHsLWhNZZMxPQCLTEuy+cYF6D9i8Q5e2Lcyz4AGwKdJbX0p7AegC2qnvxAsAxQRAYH8J6Dg1a/lvpKRJinMW4cxLMPsDAJjSCaG8cPmnAAAAAElFTkSuQmCC",
-      "description": "Time is the continued sequence of existence and events that occurs in an apparently irreversible succession from the past, through the present, into the ...",
-      "snippet": "Time is the continued sequence of existence and events that occurs in an apparently irreversible succession from the past, through the present, into the ...",
+      "snippet": "Time is the continued sequence of existence and events that occurs in an apparently irreversible succession from the past, through the present, into the ...",
       "source": "https://en.wikipedia.org › wiki › Time"
     },
     {
+      "position": 4,
+      "title": "Time and Date",
+      "link": "https://www.timeanddate.com/",
+      "displayed_link": "Time and Date https://www.timeanddate.com",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA0lBMVEVHcEz////////////9/v/////////////////////r6+v////////////////////////1+vH////////////////////++/fj5+D96tL3+fgWndn/xQD81+T/++13uT/f8PnsC2D19ObMzMzR58GZynPy7+7woW/BwcH/56//34JxvuWnp6f/6KP1v53qdR7thjvpcQ7J5fT6xdXyb5nwVIijo6ONjY2Kw1y22Jvxh31KrN663/LuL3Sfz+v2p7yWlpahoaH/1E//00zqcwD41L+JE8JMAAAAFnRSTlMAPqzn/CzLBxhN7ppdsr5+jvF2gtiD5PU8twAAAZFJREFUOI19k+eSgkAQhAkLQoFg6dUQlCCgeIc5W4bL7/9Kt7ugLKg3P0Doz55eaobjKqVIvMQ9K0kTgZao8Y07tSE1gSlZrSGKBrVqVlpJcl3HxZhI6IGOiZu/Ub60LIbgi3xMvGgyccqnF4UCavFfcnnt9d78kuhQAxrQshPEAI6TtyIWPPnhJvt9UgJO+jOlhIkBgfYeBMEgugJ+OpvNI/pRMYByhyAIDi44X98TC6bz2WJ67aEUEQ/YwgbfcXyw0sUijfL3eh6BNhkkbgH/pvPrYdvkkGFI2kR2ebz8EJ4HoHE6QJZdToQZMgh4q/f1xsKACmEXV7YEZI+Hpb4+9/t9D1qclAPHE3YYj3EKFBOj4aZPAZ3jAC0vWfdIAtrbEUC8pZ3W5837ygI8FfhLo3AZUmP7M7Y/4iKDR254JnQmGcS73chlnmUyDSzgjip6PjOtClHRZTp1ighPChUjpT4DzGJsG+3HuqDctqbzv46JB11ajE5Wo1mVxfruYRO5XB9Dv99eypiCYQimypr/AdnvS9Q5ruOyAAAAAElFTkSuQmCC",
+      "snippet": "Current Time (World Clock) and online and printable Calendars for countries worldwide. Find the best time for web meetings (Meeting Planner) or use the Time ...",
+      "source": "https://www.timeanddate.com"
+    },
+    {
+      "position": 5,
+      "title": "What time is it - Exact time - Any time zone",
+      "link": "https://vclock.com/time/",
+      "displayed_link": "vClock.com https://vclock.com › time",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAY1BMVEX////4+/7O3fGqw+WWtN/7/v/T4fJpl9MAW7wAV7wAU7oodMfq8fkAWbwAX747ecdjktF4oNccbMMHZcAAW73Y5PRYjc8AY8FBfspmlNIncMXj7PeHq9ufu+LA0+y0y+l9pNjnYfitAAABAElEQVR4AbzSAxbFMBAF0FcjTmrvf5NfNY//rRHNDP7Msh3XdWwP1/wgjL5igis0YIwLqZQk8rK5Drnyrd9A3tV3k4gU96hOsn07K7exEYTi8L0IsGEzPvbvLS0EtkqmxtdVjZ8mp7v+kqkDkpT4aiMfW3YkLHx1LLG/l7jHjhOVGGVcAD5rsOdGA0Y+Zz012dRxUZ9+wMCNmcaDit3TEKAm0XM7GTm7SY66wMbIEpF9XOaOz8OlWckGnCgWHEO9k3LmY1EekwVPhMFTur0s0fShYFKRGP9YcglX6VhyqeKh9nFAy2/RlsNQCs5YQHFml8l7nGAgIsmEP+Mw0jm/AgDVXwzahod34wAAAABJRU5ErkJggg==",
+      "snippet": "Online clock. What time is it in different regions of United States, Canada, Australia, Europe and the World.",
+      "source": "https://vclock.com › time"
+    },
+    {
+      "position": 6,
+      "title": "Exact Time Clock Now (With Seconds, Milliseconds)",
+      "link": "https://clock.zone/",
+      "displayed_link": "Clock.Zone https://clock.zone",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAALVBMVEVHcEwAAFUAAFUAAFUAAFUAAFX/AAAAAFhwAEGNADqxAC5OAEnLACIqAE/jABXKkiA9AAAABXRSTlMA7XPscvwJ5a0AAADoSURBVDiNlZPRFoQgCETNkhHN/v9zVywN3dbOzpPCVRhKY+zqfmq1xmy/06LNLHNgMfO8c/8BEF3L6EcALnIIeygEPJ2LBsDvdKpsEw0AapoOXFvWADindhbKl7gsdA8I+QBw5HiqfOqaTDEfjFKiViD0LlCuqa3VXvo5gEoLEI/NhJ5DqeBFUoG/AD5IKw6jjjTI9QCuMHtmDtVNX+I0KWJl4gaKyR2us9sBrXVoEwqgOv8yce9GQKZ3zh/a5Q2k5m0GoJVIjyUub/4RAHNtLP+dLa8/FtyT3t/F69OzcyA/bzu5Y7HmAzdJFrzSm6EUAAAAAElFTkSuQmCC",
+      "snippet": "My main goal was to build a website where you can find real exact time. ... This clock shows time from our dedicated server synchronised with atomic clock.",
+      "source": "https://clock.zone"
+    },
+    {
       "position": 7,
-      "title": "TIME | definition in the Cambridge English Dictionary",
-      "link": "https://dictionary.cambridge.org/us/dictionary/english/time",
-      "displayed_link": "Cambridge Dictionary https://dictionary.cambridge.org › dictionary › time",
-      "favicon": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc1Nzc3Nzc3NzU3Nzg3Mjc3Ny03Nzc3Nzc3NzcuNzc1Nzc3MjU3OC01N//AABEIACAAIAMBEQACEQEDEQH/xAAaAAACAgMAAAAAAAAAAAAAAAAEBgIFAQMH/8QAKRAAAQMCBQQBBQEAAAAAAAAAAQIDEQAEBRIhIjETFEFhUQcVJFKRBv/EABkBAAMBAQEAAAAAAAAAAAAAAAECAwUABP/EACMRAAEEAgEEAwEAAAAAAAAAAAEAAgMRITFRBBLR8AUikRP/2gAMAwEAAhEDEQA/AOVAVoKKOw7C7zEnEN2TBdUtxLSRmA3KMAan3UZOpiieGPNE6VWQPkaXNGAp3+FXmHOravWemtDhbUMwVuGhEg+qMXUxSvMbDZCEkL42hzhgoMoNeilK1gJoUuTr9P7q2Qex7RBv37tAYuy7CmJhKVBEQrKrdB540rL+QpsrCW3eL4NrR6LMbvtgWSOcfudLf/uLi2cUbEWiO9Zul9e8Dm58jMlRKIATJM6cRHun+N+07z2axfOkOvxG2zuiBwK53jSUFNitchZdodktpcQXgotBQKwkwSmdY9xU06bLbCWGHmne0xPrpzrCrZxtKUlJgFG9SiQYndIP8pe6xWEdGxaI+22j/Wdu7XG+qTnU4rKtbhk+f2Mg6/HPMsHluBSUi8m0qurRnV05yScubmPE1UlLSCFRCcqxTid6ZJuVknkwNfGulARM9J8ru4qRxO8AP5CtZnaPIg+Pij/NvpPld3FVy10SVwC//9k=",
-      "description": "time meaning: 1. the part of existence that is measured in minutes, days, years, etc., or this process considered…. Learn more.",
-      "snippet": "time meaning: 1. the part of existence that is measured in minutes, days, years, etc., or this process considered…. Learn more.",
-      "source": "https://dictionary.cambridge.org › dictionary › time"
+      "title": "TIME (@TIME) / X",
+      "link": "https://twitter.com/TIME",
+      "displayed_link": "Twitter https://twitter.com › TIME",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAAAAABWESUoAAAA3ElEQVR4Ac2SGQDFMBBE1ylOcYpTner0neK0TnGpU53iFKc6xWl+p+f25D7InZ295Cv0mGjFUOzWDVVVa/WykaBiaBBFfsiyory3JASRjs8mInqxUGRw47CIBIy7Ew0Sh0nED4OXCwkNh8h7GrrgCkVK9a7w6Q2BjoVa6Oo9EZEDVJ7I1M4UeMDXzIEhvoukFxNMaP8o4gpon1l9qnqc7DcPIgpd7Ce0t/fJVO0q0qIsVeuY1XwNYK1gwm8J2GAqvHRF5mD7BcG0Rl6yegjw0BqdakE8Bni0RyjyDf4Y1Y0n0wNT4wAAAABJRU5ErkJggg==",
+      "snippet": "isn't just the biggest K-pop act on the charts. They've become the biggest band in the world—full stop. “We climbed our way up slowly, so it feels like we ...",
+      "source": "https://twitter.com › TIME"
+    },
+    {
+      "position": 8,
+      "title": "Time Converter and World Clock - Conversion at a Glance ...",
+      "link": "https://www.worldtimebuddy.com/",
+      "displayed_link": "World Time Buddy https://www.worldtimebuddy.com",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADwUlEQVR4AWJABqPAIaFdwSa5fb8NoJ1y3Jo0ieH4Xspex/K1bdu2bdvqXvPr2raNsY0byCTpyclbk2dwAVPn/E5YVf/uTnXpxDW0QDyJPF4yARyXcc4b6SNkr+mZ+AnPCLrr5U+VTV97qmwKnsSLGPQ5JiSWXDmiccDnHKE5PU9jTxFPl898FFQxA0EV08zT5YdwY1u/OyRK9xDk411GQDBezlSSCIZ9zZPV2n+nLsC5yzdg7ZUPOa99Ymc98ooREFI1C0zlDCJ+wIZWuTanZxtk/fzPSekTJLZWfSsgrHoOPKmyudzeHRXw70mnhiJ1TxUhOUTrVkB4zTwIEWSxma0L5/L6dw8L0JruRdx9nFPfCoisXQAP6ECTK+jfA1m//HvKe0/NXc4i0DcCouoWgYgWqz7h1IoG9kHWryggkF9g6+5b0H0uVkBM/RIEWGQrxDaoLxQNHqiA/06B7Il2+zjP2JwVQBfFNSwzsWwVrjVqrXjIB7J++++05LlPzhFBEbUL8tvzADJeQxjfuAJ3Zxnim5ZB/NJhK4AulAEMxksCf2gzgomNgISmFSASm1dBbGKTorVVKBvxg6yf6H/A8/0roYLmrIDkljVIwgsY9tfESo6/gVj8pPl9dzxD/R9gX2N9jmFsNW8FtK4DiUgJWMenTx+NgyNPqWriOZB15NRFyitY12fnPkHB8xmmtq1DamsA8ulyuph+W35K9frE3vv6Dzi8tl//WGra5xkrRkB6+wYQaXg5feU09TLZTD1byqGAP+HOdeT0RSgePJB+8zI0zzkrIKNjkz49Dxn91glIfJOSoBbKhv1w4cpN8Frvf/MnvxLu1zPo9UhM1nsIEwNDKC9AfLRUE1/J6dmBlZfeM2Iofuntb2hwZZ/BCJChY+wgIphHNKf9eb278PI736oCFYICP9AzFCsgrW0DDO2bPJASpzLriNsjterx5+Cj7/42Qr757SjVsFf3ec5ARjvSsQXip3OscN3NOf3kE7PPvA0Xr7o/C8Wyh841ArI6t4HpIitsGd/kBIm7tLb56kdw6baQNz/7jXLSYwXkdO9Abvcu5HTtAPmCxLkeueyubbSE1jiWM7DeOPMibOH/RPmw3+kzAvJ6duEw+b17btyj8QPjnOHuNwIK+/Y+Kujbh4K+PaaQ2Wc4T77WJXb7JK+YGtn83n2fEVDUtxtUPHAAxf0IWQefWukhPPo19rFfpL3kkz1W1OV79BGvVTbkCyod9P9UOuiDEqSUGPKz1ZyfYV+QvLMHMTX/R0VD7uUP1y08Jnm8PtpM8AAAAABJRU5ErkJggg==",
+      "snippet": "Effortless time conversion and world time. Schedule conference calls, webinars & online meetings, plan travel and track flight arrival time across time ...",
+      "source": "https://www.worldtimebuddy.com"
     }
   ]
 }
+```
+
+### 🎯 Filtering Fields
+
+🔍 You can filter info based on specific fields, if you do not choose any to filter with then all will appear in output. Here are the available fields:
+
+- `title`
+- `link`
+- `displayed_link`
+- `favicon`
+- `snippet`
+- `source`
+
+🌟 **Example use**:
+
+```python
+# Call the search function with the fields you want to filter with
+novexity, returned_gateway = search(
+    "Time", 'title', 'link')
+```
+
+🌎 **Country-based Search**:
+
+To tailor the search results to a specific country, you can use the `country` parameter. Simply provide the country's ISO 3166-1 alpha-2 code, available from [World Data's country codes list](https://www.worlddata.info/countrycodes.php).
+
+```python
+# Call the search function with the country parameter
+novexity, returned_gateway = search(
+    "Time", country="fr")
 ```
 
 <h2 align="left">🤝 Contributing</h2>
