@@ -1,6 +1,6 @@
 <h1 align="center">Novexity</h1>
 <div align="center">
-    <img src="Static/Images/Novexity.png" width="200">
+    <img src="static/images/Novexity.png" width="200">
 </div>
 
 <h4 align="center">Open Source SerpAPI Google Search Alternative 🌐</h4>
