@@ -1,6 +1,6 @@
 <h1 align="center">Novexity</h1>
 <div align="center">
-    <img src="https://github.com/NorkzYT/Novexity/assets/53381649/0ecb64b3-1465-4ddb-8947-dbcb192db5d4" width="200">
+    <img src="Static/Images/Novexity.png" width="200">
 </div>
 
 <h4 align="center">Open Source SerpAPI Google Search Alternative 🌐</h4>
