@@ -8,12 +8,12 @@
 
 <div align="center">
 
-<a href="https://github.com/NorkzYT/NexusAPI/graphs/contributors"><img src="https://img.shields.io/github/contributors/NorkzYT/NexusAPI.svg" alt="Contributors"></a>
-<a href="https://github.com/NorkzYT/NexusAPI/network/members"><img src="https://img.shields.io/github/forks/NorkzYT/NexusAPI.svg" alt="Forks"></a>
-<a href="https://github.com/NorkzYT/NexusAPI/stargazers"><img src="https://img.shields.io/github/stars/NorkzYT/NexusAPI.svg" alt="Stargazers"></a>
-<a href="https://github.com/NorkzYT/NexusAPI/issues"><img src="https://img.shields.io/github/issues/NorkzYT/NexusAPI.svg" alt="Issues"></a>
-<a href="https://github.com/NorkzYT/NexusAPI/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed/NorkzYT/NexusAPI.svg" alt="Closed Issues"></a>
-<a href="https://github.com/NorkzYT/NexusAPI/blob/master/LICENSE"><img src="https://img.shields.io/github/license/NorkzYT/NexusAPI.svg" alt="MIT License"></a>
+<a href="https://github.com/NorkzYT/Novexity/graphs/contributors"><img src="https://img.shields.io/github/contributors/NorkzYT/Novexity.svg" alt="Contributors"></a>
+<a href="https://github.com/NorkzYT/Novexity/network/members"><img src="https://img.shields.io/github/forks/NorkzYT/Novexity.svg" alt="Forks"></a>
+<a href="https://github.com/NorkzYT/Novexity/stargazers"><img src="https://img.shields.io/github/stars/NorkzYT/Novexity.svg" alt="Stargazers"></a>
+<a href="https://github.com/NorkzYT/Novexity/issues"><img src="https://img.shields.io/github/issues/NorkzYT/Novexity.svg" alt="Issues"></a>
+<a href="https://github.com/NorkzYT/Novexity/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed/NorkzYT/Novexity.svg" alt="Closed Issues"></a>
+<a href="https://github.com/NorkzYT/Novexity/blob/master/LICENSE"><img src="https://img.shields.io/github/license/NorkzYT/Novexity.svg" alt="MIT License"></a>
 
 </div>
 
@@ -186,4 +186,4 @@ Every contribution is welcome! 💖
 
 <h2 align="left">📄 License</h2>
 
-This project is licensed under the MIT License. For more details, see [LICENSE](https://github.com/NorkzYT/NexusAPI/blob/master/LICENSE).
+This project is licensed under the MIT License. For more details, see [LICENSE](https://github.com/NorkzYT/Novexity/blob/master/LICENSE).
