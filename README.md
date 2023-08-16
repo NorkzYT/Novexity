@@ -40,8 +40,8 @@ Example usage:
 
 ```python
 import os
-from novexity import search, configure
 from dotenv import load_dotenv
+from novexity import NovexitySearch, configure
 load_dotenv()
 
 AWS_ACCESS_KEY_ID = os.getenv('GOOGLE_SEARCH_AWS_ACCESS_KEY_ID')
@@ -49,9 +49,17 @@ AWS_SECRET_ACCESS_KEY = os.getenv('GOOGLE_SEARCH_AWS_SECRET_ACCESS_KEY')
 configure(aws_access_key_id=AWS_ACCESS_KEY_ID,
           aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
 
-# Call the search function
-novexity, returned_gateway = search(
-    "Time")
+params = {
+    "q": "Minecraft",
+    "country": "fr",
+    "lang": "fr"
+}
+
+# Initialize NovexitySearch with the parameters
+novexity_search = NovexitySearch(params)
+
+# Get the search results
+novexity, returned_gateway = novexity_search.get_dict()
 
 # Save the results to search.json
 with open("google-search.json", "w", encoding="utf-8") as file:
@@ -59,120 +67,128 @@ with open("google-search.json", "w", encoding="utf-8") as file:
 
 # Shut down the gateways
 returned_gateway.shutdown()
-
 ```
 
-Please remember that if gateways are not shutdown via the `shutdown()` method, you may be charged in the future.
+⚠️ Remember: If gateways are not shut down via the `shutdown()` method, you may incur charges.
 
-Output:
-
+<details>
+  <summary>📌 Output: </summary>
+  
 ```json
 {
   "organic_results": [
     {
       "position": 1,
-      "title": "Time.is - exact time, any time zone",
-      "link": "https://time.is/",
-      "displayed_link": "Time.is https://time.is",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAVFBMVEVHcEzOMULqFjLrByrxDC3yFTLxACnwFDHuHDakT1jKQlDkITjrEzDrGzXxABwAq6PrDi31b3r//v7wAAj3iZL6vMH81djzO0395OXfHjUAsaDGMD8ufdWhAAAAHHRSTlMAVMLx////zXckOpPo0/8H3v//////////ugp3X9i4HQAAALFJREFUeAG90kUCwzAMAEEFrLJBcvj/7yyEQSm3c16z4W+CMIrVFV6pqzjabGFkgwK1g06Iohhae1xxgMYBVxzFFYQ1TrhCzQK9KEwTWGy4+H6gHfWTaM3CDOxJ3QrN7JKUlwFyQhmz8inlXqMQIKfkc6IkY41ykBDljhmvxEB7T56xZxYXpa9QCAR/CtSzz33AFfbZLwcFiqKyC0qxOO5gEBT2GI0cbViVMGHKCQNfcwEXFBWOnAumeQAAAABJRU5ErkJggg==",
-      "snippet": "Your clock is 38 minutes and 57.8 seconds behind. Accuracy of synchronization was ±0.005 seconds. Time in New York, United States now: 11:39:03am.",
-      "source": "https://time.is"
+      "title": "Site officiel | Minecraft",
+      "link": "https://www.minecraft.net/fr-fr",
+      "displayed_link": "Minecraft https://www.minecraft.net › fr-fr",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAYFBMVEVSpTVTpzZOnzNDjCxGkC1AgioNHwkNGggMGAcWMA9LlzA+fCgECAMAAABFiC0gNBceMBYlQBperEBSlzgQJgtFiywGDQQZNxATKgxAgCkNFAlSkDlanz8TIw1ToTdVlTxP7l7cAAAAsUlEQVR4Ad2RBQ7CMBRA6ba6zV3uf0sqWBPc4cW+6+qvAI5ADohiS+KVxClRkA8RxphQBozMKDEKguAwgAtpID6AWFnwIwHYB+C7AuSmhcG3kGGA0qkhi5khzqysVbhobiloaaCFU44dq6qloa7A6ihRBH0AjKKj6Q1thTSIljZHioBOyB2i+1xA7zgdQIbRMJCTAdj/Ah8PgL2Y/Dcn0cMjx5yXZfGSEeZjpzSE0tewBofsD3nOEHV9AAAAAElFTkSuQmCC",
+      "snippet": "Minecraft est un jeu qui consiste à placer des blocs et à partir dans des aventures. Achète-le ici ou explore le site à la recherche des dernières nouvelles ...",
+      "source": "https://www.minecraft.net › fr-fr"
     },
     {
       "position": 2,
-      "title": "TIME | Current & Breaking News | National & World Updates",
-      "link": "https://time.com/",
-      "displayed_link": "Time Magazine https://time.com",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQMAAABJtOi3AAAABlBMVEX////0DAxCDAtVAAAAAXRSTlMAQObYZgAAAB5JREFUeAFjkP///weEEGA+wIFOMDAfYBg4Qv4HAwCWWB254jDUcwAAAABJRU5ErkJggg==",
-      "snippet": "Breaking news and analysis from TIME.com. Politics, world news, photos, video, tech reviews, health, science and entertainment news.",
-      "source": "https://time.com"
+      "title": "Minecraft",
+      "link": "https://fr.wikipedia.org/wiki/Minecraft",
+      "displayed_link": "Wikipédia https://fr.wikipedia.org › wiki › Minecraft",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAM1BMVEUAAAD+/v41NTUBAQEAAABZWVknJycWFhaZmZmIiIjp6ellZWXMzMzX19eurq54eHhHR0dExXFyAAAAAXRSTlMAQObYZgAAAPtJREFUeAG8kAWOBDAMA9d1Sin+/7XXbpZZdBaURlMrhx28ycGCD/n0bvkBwJf8C+AoIvRAWGtMyHGtCWkfxW+DRopuuIjUtTQJDStevNoXWaRjRSllLd1O8FFhgEZx2BmkAmHC8HwpOUyxSA50VqOjXgAl50URvNWPBRcAnmwnhbcduthqQCO9KYTFBG7eDWoK1T47AZX9DuiUYT/TuhX3MGpnD51kPprSA9Dl+BCKl7jWHHEHmHsLWhNZZMxPQCLTEuy+cYF6D9i8Q5e2Lcyz4AGwKdJbX0p7AegC2qnvxAsAxQRAYH8J6Dg1a/lvpKRJinMW4cxLMPsDAJjSCaG8cPmnAAAAAElFTkSuQmCC",
+      "snippet": "Minecraft est un jeu vidéo de type aventure « bac à sable » (construction complètement libre) développé par le Suédois Markus Persson, alias Notch, ...",
+      "source": "https://fr.wikipedia.org › wiki › Minecraft"
     },
     {
       "position": 3,
-      "title": "Time",
-      "link": "https://en.wikipedia.org/wiki/Time",
-      "displayed_link": "Wikipedia https://en.wikipedia.org › wiki › Time",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAM1BMVEUAAAD+/v41NTUBAQEAAABZWVknJycWFhaZmZmIiIjp6ellZWXMzMzX19eurq54eHhHR0dExXFyAAAAAXRSTlMAQObYZgAAAPtJREFUeAG8kAWOBDAMA9d1Sin+/7XXbpZZdBaURlMrhx28ycGCD/n0bvkBwJf8C+AoIvRAWGtMyHGtCWkfxW+DRopuuIjUtTQJDStevNoXWaRjRSllLd1O8FFhgEZx2BmkAmHC8HwpOUyxSA50VqOjXgAl50URvNWPBRcAnmwnhbcduthqQCO9KYTFBG7eDWoK1T47AZX9DuiUYT/TuhX3MGpnD51kPprSA9Dl+BCKl7jWHHEHmHsLWhNZZMxPQCLTEuy+cYF6D9i8Q5e2Lcyz4AGwKdJbX0p7AegC2qnvxAsAxQRAYH8J6Dg1a/lvpKRJinMW4cxLMPsDAJjSCaG8cPmnAAAAAElFTkSuQmCC",
-      "snippet": "Time is the continued sequence of existence and events that occurs in an apparently irreversible succession from the past, through the present, into the ...",
-      "source": "https://en.wikipedia.org › wiki › Time"
+      "title": "Minecraft.fr - Le site de la Communauté Minecraft Francophone",
+      "link": "https://minecraft.fr/",
+      "displayed_link": "Minecraft.fr https://minecraft.fr",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD50lEQVR4AWKgJhgFmeYqFrF64tx0tbTAQEEg00I5NxtAazlAudFGYTi/UeesaxtBG/esbTNYBGvb3tq2bdu2bdvu3H6ZttPgy6K457zhzDzPvUNe22MxvHag4rbZEcKhN/zl4GheW34Mt+1kBH6pBmtG3qflHj9Wk0a/pNtYjW4NBcmBmGGyN7h7oyY/s9spmG6xUXBagZhpDGFM4yN+DDPjX9otLhHspqTAF4ljMiTxa7rFpCqAC1K2GQmnwjA6EcoyMq8WHMdp1zCa2/ZAXYGx/PbQP4gPa8qD4MayDHi4IZ9QWbal4Bo5F9KD3sygQAy/3Yy6QAeFCmF9VQjcWpkFz7cVw/Otn3N1eRakeDJJKCbnA7vRm+vB5aw2LWqCxgk6wBBJX9jYPwzurMpB0BJMiuH0/BQiX2JFArFhGF8KZ5u00RKI5LQ2xUHjhR1guMwSNg8Uw901GCgmB6bFQ5nSGcK5FgYlwhjG10OZxu2+HXhdjOt/hSaIOsLICCvYNkQC99fmUKNF3dVKYNs4FaEWiLPvTAFxkTCNZ9M0C8GJkRGW8GBdHgIWUaEEMLCXB0bD26s7ULZSv60eGklOoFBqDTKOhWEBhnGEtgC33ZM56W6acKzAiz1D4M3F9fDh+W2givgAL/aNIP+fXyFWC5DJF1uCtLcZ7jj4GNTNxFR3AjcX5/l8hm4vJ0EvD42HV8dnaXX97s7RL9CP8PH1E/jw5Ar526tjM8j/pxUGkbuAjMIZcoJFuAnsxl2AHE9MiznzfHsZuXGqPn7QPAaQ2GDU7XBAy2F3y6h0X9AUKJTZ6o+/l3EWDVfPtxZufbl3OLy/ewzeXFgLrw5PRqCKOh2EA+LctSaQi5mApCe9K15gS+FhzDFQa4HHmwsR2IWCq5Phy9EVuEAzVAh4ngJjJbAi1O83V2Vrdk8m2Z2hfQ1gGg2uTuAWBcVLYGS+/XZuQZomnEy8QxctASnbyNKgwLOtRU8xcLwIJoemxxMacDKFEqv4wF6NW4Uw6F2kvYx7+fnR/qhuAlCX3FmTC3smxRAzi4OhVO5EqLwEkCezo+BoGq8q5ba1ezSDzYX1DXRMfb6+Igu2j1MSk/MCID/cHuQefL0oPPmaEnNpta0XG7JNdeGXlqTDhpFRMC7LDzLFNjigQYkciR2UK51day1wZ0Nmm7MLUmH1kAgYmeYNKUGW1YPweYeyP8qDP1LhwRPL5ay/aHWo3+RuPDnawONaA915l9D7bLkHN0nhxedJLS3/pf1oyb1F5mijCzDAx1Hu/HVRnvySKDeeq9KLb0L7lRXpxvdQoFHK3bkSNJlO6gmhfBrVwSgAAAXCWCxTEFILAAAAAElFTkSuQmCC",
+      "snippet": "Minecraft c'est quoi ? · Minecraft est un jeu de construction de type bac à sable, qui permet aux joueurs de créer leur propre monde avec des blocs, un peu comme ...",
+      "source": "https://minecraft.fr"
     },
     {
       "position": 4,
-      "title": "Time and Date",
-      "link": "https://www.timeanddate.com/",
-      "displayed_link": "Time and Date https://www.timeanddate.com",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA0lBMVEVHcEz////////////9/v/////////////////////r6+v////////////////////////1+vH////////////////////++/fj5+D96tL3+fgWndn/xQD81+T/++13uT/f8PnsC2D19ObMzMzR58GZynPy7+7woW/BwcH/56//34JxvuWnp6f/6KP1v53qdR7thjvpcQ7J5fT6xdXyb5nwVIijo6ONjY2Kw1y22Jvxh31KrN663/LuL3Sfz+v2p7yWlpahoaH/1E//00zqcwD41L+JE8JMAAAAFnRSTlMAPqzn/CzLBxhN7ppdsr5+jvF2gtiD5PU8twAAAZFJREFUOI19k+eSgkAQhAkLQoFg6dUQlCCgeIc5W4bL7/9Kt7ugLKg3P0Doz55eaobjKqVIvMQ9K0kTgZao8Y07tSE1gSlZrSGKBrVqVlpJcl3HxZhI6IGOiZu/Ub60LIbgi3xMvGgyccqnF4UCavFfcnnt9d78kuhQAxrQshPEAI6TtyIWPPnhJvt9UgJO+jOlhIkBgfYeBMEgugJ+OpvNI/pRMYByhyAIDi44X98TC6bz2WJ67aEUEQ/YwgbfcXyw0sUijfL3eh6BNhkkbgH/pvPrYdvkkGFI2kR2ebz8EJ4HoHE6QJZdToQZMgh4q/f1xsKACmEXV7YEZI+Hpb4+9/t9D1qclAPHE3YYj3EKFBOj4aZPAZ3jAC0vWfdIAtrbEUC8pZ3W5837ygI8FfhLo3AZUmP7M7Y/4iKDR254JnQmGcS73chlnmUyDSzgjip6PjOtClHRZTp1ighPChUjpT4DzGJsG+3HuqDctqbzv46JB11ajE5Wo1mVxfruYRO5XB9Dv99eypiCYQimypr/AdnvS9Q5ruOyAAAAAElFTkSuQmCC",
-      "snippet": "Current Time (World Clock) and online and printable Calendars for countries worldwide. Find the best time for web meetings (Meeting Planner) or use the Time ...",
-      "source": "https://www.timeanddate.com"
+      "title": "Télécharger Minecraft (gratuit)",
+      "link": "https://www.clubic.com/telecharger-fiche430565-minecraft.html",
+      "displayed_link": "Clubic https://www.clubic.com › ... › Jeu d'aventure",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACQElEQVR4AcSWA4wcQBSGtzbj2m1Un1Hbtm3btm3bttugbuNcg7pnG19nulPd3K3xki8b7fv/3XkyyMDgJcktaCo4I/ghSBPgINJUzjNKQ2oZ/hUvKJgtCBXgZEKlltL8ZSCXYI4gWYCLSFaauaSBZoJgAS4mWGpLA6et/7KHoL769FTUV3hYk+u0NPDdKuHcPlCtG/SeB4v3wfZzsPUMzNsFnWdA+Q6Q08tSI98NllW7pzGpx0DYewk+B0NaOlqkpMKHz7DuGNTobomJNINF4gUDYNJG+BaKxRH0CfoukP+YzJFtfoN58UBYfQSSU7A6ouOMxnP72mggh2D6FtPi6emCDLKNy0+gaGP5Y6w14AH+w+BHeNZv/ey9sfB6zoU+82H5QXgXZDSkgvsvoUoXG58grx8cu4kWUbEwcxuUbIZqPYUHlG4LC/fA03ew5xJU7qwVooUGPKBWXwgO13/51M2QS9VHdt1SqKFWfFYaqA8jV6LFvRdQvLGZxLo5Gwx4wubTaDFxvTRncXLbDeT0hhO3+S9kJ7Sc4EYDSSnQfLyLDMgn2HIaLcatdZUBWYSr0OLuCyjmkiL0gNr9IDgi6zbM6ew2lOT1R9WBPohmmBlEz2wYRDoeEDgCQiKyHsVy2s3eAd1nO3QU690wa5sUdMcyUm9aKBDWHYfkVJeuY93EtC1yMzr8ILHuJPMaDPuvwJcQh51k1h+leXygenfoPR+WyKP0LGxRR2knm45S95/lPzegHZMB75oNeOd0wLvnAI3wB4XYQ7ZNAAAAAElFTkSuQmCC",
+      "snippet": "Minecraft est un jeu de type bac à sable disponible sur à peu près toutes les plateformes possibles : on peut y jouer sur ordinateur (Windows, Mac), ...",
+      "source": "https://www.clubic.com › ... › Jeu d'aventure"
     },
     {
       "position": 5,
-      "title": "What time is it - Exact time - Any time zone",
-      "link": "https://vclock.com/time/",
-      "displayed_link": "vClock.com https://vclock.com › time",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAY1BMVEX////4+/7O3fGqw+WWtN/7/v/T4fJpl9MAW7wAV7wAU7oodMfq8fkAWbwAX747ecdjktF4oNccbMMHZcAAW73Y5PRYjc8AY8FBfspmlNIncMXj7PeHq9ufu+LA0+y0y+l9pNjnYfitAAABAElEQVR4AbzSAxbFMBAF0FcjTmrvf5NfNY//rRHNDP7Msh3XdWwP1/wgjL5igis0YIwLqZQk8rK5Drnyrd9A3tV3k4gU96hOsn07K7exEYTi8L0IsGEzPvbvLS0EtkqmxtdVjZ8mp7v+kqkDkpT4aiMfW3YkLHx1LLG/l7jHjhOVGGVcAD5rsOdGA0Y+Zz012dRxUZ9+wMCNmcaDit3TEKAm0XM7GTm7SY66wMbIEpF9XOaOz8OlWckGnCgWHEO9k3LmY1EekwVPhMFTur0s0fShYFKRGP9YcglX6VhyqeKh9nFAy2/RlsNQCs5YQHFml8l7nGAgIsmEP+Mw0jm/AgDVXwzahod34wAAAABJRU5ErkJggg==",
-      "snippet": "Online clock. What time is it in different regions of United States, Canada, Australia, Europe and the World.",
-      "source": "https://vclock.com › time"
+      "title": "Minecraft - Jeux PS4",
+      "link": "https://www.playstation.com/fr-fr/games/minecraft/",
+      "displayed_link": "PlayStation https://www.playstation.com › Accueil › Jeux",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAclBMVEX////T0tKmpaXi4uKNjY0AAAAnJCVQTk+GhYbHx8efn58PCgwaFxgFAAA2NDURDg8jISIfHB2YmJiVlJUWFBUYFhYwLi4vLC1+fH1yb3D8/Pzu7u60tLS9vb1paGlZWFiBgIA/PT3Kysrr6+rb29tIRUZcYEnHAAAA9UlEQVR4Ad2SQ4JEQRAFs/Dq27bvf8S2u8eeWEc66bfBuHhekFCabtDTmJZtwXF18aTgKeUrC0H4tBD4IvJihE8KSUrM8xNbPCXYGRmxr2C+JOQvCE7xoQye74M/saidAEAr6Y7S5HyboaJafxDfFC60eieUjEdt14aMTrB+8ADoW2EYXQeAn8XJcEg0tTEcx83nXQ9LDWeQgsrOsg7ripDYy0g0N+Y2Q5MzIpYPgYdsX0VoHlRfDFj2PdAktxXjQZ5GGWWnAuWa3NlkmLsE2FQ0bqfc6NwBhhrI2nobzJu7VTA5uHVnVvvS+cOvmKuTPk/0X1gDxHgSBQJyiJ4AAAAASUVORK5CYII=",
+      "snippet": "Acheter Minecraft sur PS4. Construisez tout ce qui vous passe par la tête, ou menez de grandes expéditions dans des régions mystérieuses et dans les ...",
+      "source": "https://www.playstation.com › Accueil › Jeux"
     },
     {
       "position": 6,
-      "title": "Exact Time Clock Now (With Seconds, Milliseconds)",
-      "link": "https://clock.zone/",
-      "displayed_link": "Clock.Zone https://clock.zone",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAALVBMVEVHcEwAAFUAAFUAAFUAAFUAAFX/AAAAAFhwAEGNADqxAC5OAEnLACIqAE/jABXKkiA9AAAABXRSTlMA7XPscvwJ5a0AAADoSURBVDiNlZPRFoQgCETNkhHN/v9zVywN3dbOzpPCVRhKY+zqfmq1xmy/06LNLHNgMfO8c/8BEF3L6EcALnIIeygEPJ2LBsDvdKpsEw0AapoOXFvWADindhbKl7gsdA8I+QBw5HiqfOqaTDEfjFKiViD0LlCuqa3VXvo5gEoLEI/NhJ5DqeBFUoG/AD5IKw6jjjTI9QCuMHtmDtVNX+I0KWJl4gaKyR2us9sBrXVoEwqgOv8yce9GQKZ3zh/a5Q2k5m0GoJVIjyUub/4RAHNtLP+dLa8/FtyT3t/F69OzcyA/bzu5Y7HmAzdJFrzSm6EUAAAAAElFTkSuQmCC",
-      "snippet": "My main goal was to build a website where you can find real exact time. ... This clock shows time from our dedicated server synchronised with atomic clock.",
-      "source": "https://clock.zone"
+      "title": "FR-Minecraft Actualité Minecraft, aide et astuces avec FR ...",
+      "link": "https://fr-minecraft.net/",
+      "displayed_link": "FR-Minecraft https://fr-minecraft.net",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACBklEQVR4AY3RU2BlMRAG4Fnbtm3btm37ZW3b3q1t27Zt2zb/NrfWOX2Iky/JDAFoULLzcrpL+hufeGkv8+Ci1a9/O83f6CzTu+txyuKLKltvXBoMQpKixi2QOOPZRnY3SH4PSK6ySO8CSezANas/vzgB2wiPVcP/7Urp9ns92n5aD1o6HDSlP2jOYNDiYXjvpHiHE/hsJ/uEHWal3a9NoLZtQGN7g8b1AY3vA2Ef/XOcgHqAxb4aoIPkDsEhmjkQNKoXaExvyAaZH+EEIhNjR1QeLmNAR7FtoNtLQM9Wgl6uEsRDPsjiEG8QZ4kdD2JAZ+HNIPaN2YNA7dqAFg2DuL/RSV7gnumvLwzo+ncj6MsGUOf2oBsLQP264Lub2jVewDnCZ17NN9qy9B2dDpLbDZLcicd2Ei95gdLSUloqdcFZEEjx7ezvteWkxRcJXoAVFU+Tgwzo8n9TA2Cp5i3bVgHFxcVtlktfdGJIO5ldtUBf2aNpbI0XYMUt2n9O79+bCnv/34IxIruw9PdO9JLeUxYcHzmuVQCLxTPj/69X/dyJSz/24+Lfw2gvtweXLH7+Nwt3W8PWOYGXFiIvOotuK1v+fw9sha/jsehpdBHZCpKr+s5bJ4UHnMBJ1afqm3/uT9/682DKE/n7Tq/M//7ernzbaNuvQ+nHRa+4fNP8LJKZldkLAFUA+zV/1wJOw7cAAAAASUVORK5CYII=",
+      "snippet": "FR-Minecraft site d'actualité Minecraft et aide au crafting, skins, mods, maps, astuces..",
+      "source": "https://fr-minecraft.net"
     },
     {
       "position": 7,
-      "title": "TIME (@TIME) / X",
-      "link": "https://twitter.com/TIME",
-      "displayed_link": "Twitter https://twitter.com › TIME",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAAAAABWESUoAAAA3ElEQVR4Ac2SGQDFMBBE1ylOcYpTner0neK0TnGpU53iFKc6xWl+p+f25D7InZ295Cv0mGjFUOzWDVVVa/WykaBiaBBFfsiyory3JASRjs8mInqxUGRw47CIBIy7Ew0Sh0nED4OXCwkNh8h7GrrgCkVK9a7w6Q2BjoVa6Oo9EZEDVJ7I1M4UeMDXzIEhvoukFxNMaP8o4gpon1l9qnqc7DcPIgpd7Ce0t/fJVO0q0qIsVeuY1XwNYK1gwm8J2GAqvHRF5mD7BcG0Rl6yegjw0BqdakE8Bni0RyjyDf4Y1Y0n0wNT4wAAAABJRU5ErkJggg==",
-      "snippet": "isn't just the biggest K-pop act on the charts. They've become the biggest band in the world—full stop. “We climbed our way up slowly, so it feels like we ...",
-      "source": "https://twitter.com › TIME"
+      "title": "Minecraft - Idées Jeux & Jouets",
+      "link": "https://www.fnac.com/s396191/Minecraft",
+      "displayed_link": "Fnac https://www.fnac.com › Minecraft",
+      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAD5ElEQVR4Ab1XA5QkSxCcb9u2bdu2bdtYf9u2ubZtG2M3xmZc5aHe9Z7V8V4OShmd6MrUzIa56FKb7rfD46bCi5y2qts7nA2P/iq0vfiw0Pn6Dho1QMqnvtoGixPdzwemTP+f57KWXT9ur3swX2h74XmpPfeM1abcM/DhllNfb0/KVki0P+6dNv5zcshSerXOXntfubP5qQ/kzswrMJa9/goRENtevZYOXF0y/c1OULiz8fGvhbaMW51D726/WALOpic/pI1rWpiVGbEj4ubiy6wKAvaauxoWLND/fhQtYr+3W2NEDH+dGFEQsJRcYZJ73kYqHgCQBiEREuCoe3CNELAUX2FWEGCRLYPBr83HzHe7QfvTfgjZWpGMyND+fMBqJ2CvvruRKwewdshcFwVD0FgF18DHCjH+ewak7tfhn8ln8h+czc9g+tud5qXnr4exuTfgm/obvsnf6Tdz4dHgpv77ZAgtz88/6yOwTGF7d4az8elPOIGgPv+IiNAHQkTsh19XCJKYVwtCKhFC2N7GlPyFRNABBqbsD+j/PBapmB9xvxmkWOzIQlQeQTLqgeHP4yG0vgCkU2yPDbQ+aK5lf+OIuSfh7vvoUk6AMcxy1D8MgqPhUc7ePfQFCGL7q3xs5oe9QG5JJ2Mw/X8OpM4cZqHTaY656kDIfe+C4B78dJ4yzzTbsye470uuhNSVlwacm3ACjrr7i5ZCgCtYICFby7zx/86kp6JgZcpi7EntIAsQgqYaELwTvy3if0pDRQCy1+vkChGwNoMQMJSBIDQ/y+ecjU+A4B7+CulEmLnHBN0vBy0UfHfBM/LNgIKA8d+zfCtDgHxMCNvbQSnsnfgVybAIArnCXnMvIxFhceIFBXdUGqYUZ6ke/EhBQPvjvinDn8fB2fQUBQ9XZCq4kMYoJRUErBU30Tj9pjhgMZJBfqUIp5cYzbHxc2menp5SjsVKNq1j+X85HPWP/cKVy71vHEgL1RSx5eVHOAGx9cVH1SYgdWXvzwlQ0aGmcu1P+6YV/rdV3tqnJgEKeGUZln+BqCYBa9l1E7PLsISKBChTCrlyf9cb2/A7XyURWp/N4ASktowbVU/BrozTFirDnvpUTeXT3+0CNGSvywmwN1STigSoDAsry7CiKyxqEmBln1FBwPDnCRFVM6Dm7noFASqN6W7mDckaFir9NYuDvTd7Y2qzxJbn8qi7ofaL1YG+me93S6/WFOx49WrNikJszz2K+kC6M6wVtwxSf0h94oo3JNuB2j/N6oKzK28varWo5aLWiwKaFanRxbqTl2EqwNf+wdZiR+YNVHZTmlMDQl0Qa/2ts9fOAQxG3JOIxXBXAAAAAElFTkSuQmCC",
+      "snippet": "Minecraft. Achat et vente de jouets, jeux de société, poupée, figurines, jeux de construction... Découvrez les Univers Playmobil, Légo, FisherPrice et nos ...",
+      "source": "https://www.fnac.com › Minecraft"
     },
     {
       "position": 8,
-      "title": "Time Converter and World Clock - Conversion at a Glance ...",
-      "link": "https://www.worldtimebuddy.com/",
-      "displayed_link": "World Time Buddy https://www.worldtimebuddy.com",
-      "favicon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADwUlEQVR4AWJABqPAIaFdwSa5fb8NoJ1y3Jo0ieH4Xspex/K1bdu2bdvqXvPr2raNsY0byCTpyclbk2dwAVPn/E5YVf/uTnXpxDW0QDyJPF4yARyXcc4b6SNkr+mZ+AnPCLrr5U+VTV97qmwKnsSLGPQ5JiSWXDmiccDnHKE5PU9jTxFPl898FFQxA0EV08zT5YdwY1u/OyRK9xDk411GQDBezlSSCIZ9zZPV2n+nLsC5yzdg7ZUPOa99Ymc98ooREFI1C0zlDCJ+wIZWuTanZxtk/fzPSekTJLZWfSsgrHoOPKmyudzeHRXw70mnhiJ1TxUhOUTrVkB4zTwIEWSxma0L5/L6dw8L0JruRdx9nFPfCoisXQAP6ECTK+jfA1m//HvKe0/NXc4i0DcCouoWgYgWqz7h1IoG9kHWryggkF9g6+5b0H0uVkBM/RIEWGQrxDaoLxQNHqiA/06B7Il2+zjP2JwVQBfFNSwzsWwVrjVqrXjIB7J++++05LlPzhFBEbUL8tvzADJeQxjfuAJ3Zxnim5ZB/NJhK4AulAEMxksCf2gzgomNgISmFSASm1dBbGKTorVVKBvxg6yf6H/A8/0roYLmrIDkljVIwgsY9tfESo6/gVj8pPl9dzxD/R9gX2N9jmFsNW8FtK4DiUgJWMenTx+NgyNPqWriOZB15NRFyitY12fnPkHB8xmmtq1DamsA8ulyuph+W35K9frE3vv6Dzi8tl//WGra5xkrRkB6+wYQaXg5feU09TLZTD1byqGAP+HOdeT0RSgePJB+8zI0zzkrIKNjkz49Dxn91glIfJOSoBbKhv1w4cpN8Frvf/MnvxLu1zPo9UhM1nsIEwNDKC9AfLRUE1/J6dmBlZfeM2Iofuntb2hwZZ/BCJChY+wgIphHNKf9eb278PI736oCFYICP9AzFCsgrW0DDO2bPJASpzLriNsjterx5+Cj7/42Qr757SjVsFf3ec5ARjvSsQXip3OscN3NOf3kE7PPvA0Xr7o/C8Wyh841ArI6t4HpIitsGd/kBIm7tLb56kdw6baQNz/7jXLSYwXkdO9Abvcu5HTtAPmCxLkeueyubbSE1jiWM7DeOPMibOH/RPmw3+kzAvJ6duEw+b17btyj8QPjnOHuNwIK+/Y+Kujbh4K+PaaQ2Wc4T77WJXb7JK+YGtn83n2fEVDUtxtUPHAAxf0IWQefWukhPPo19rFfpL3kkz1W1OV79BGvVTbkCyod9P9UOuiDEqSUGPKz1ZyfYV+QvLMHMTX/R0VD7uUP1y08Jnm8PtpM8AAAAABJRU5ErkJggg==",
-      "snippet": "Effortless time conversion and world time. Schedule conference calls, webinars & online meetings, plan travel and track flight arrival time across time ...",
-      "source": "https://www.worldtimebuddy.com"
+      "title": "Minecraft-France : Actualité, Mods, Maps & Resource Packs",
+      "link": "https://www.minecraft-france.fr/",
+      "displayed_link": "Minecraft-France https://www.minecraft-france.fr",
+      "favicon": "data:image/png;base64,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",
+      "snippet": "Retrouvez sur le site Minecraft-France toutes les ressources et actualités pour Minecraft ! Découvrez nos mods, maps, resource packs et bien plus !",
+      "source": "https://www.minecraft-france.fr"
     }
   ]
 }
 ```
+</details>
 
-### 🎯 Filtering Fields
+<h2 align="left">🔎 Parameters Guide</h2>
+To make your search more tailored, Novexity supports various parameters that you can include when initializing the search. Here's a detailed overview of all the parameters available:
 
-🔍 You can filter info based on specific fields, if you do not choose any to filter with then all will appear in output. Here are the available fields:
+🔑 **Required**:
 
-- `title`
-- `link`
-- `displayed_link`
-- `favicon`
-- `snippet`
-- `source`
+- `q`: Parameter defines the search term or phrase to look up on Google.
 
-🌟 **Example use**:
+✨ **Optional**:
+
+- `country`: Two-letter country code for Google search. (e.g., "us" for the United States, "uk" for United Kingdom, or "fr" for France). Check [Google countries](./static/json/google-countries.json) JSON for a full list.
+
+- `lang`: Two-letter language code for Google search (e.g., en for English, es for Spanish, or fr for French). Refer to [Google languages](./static/json/google-languages.json) for all available languages. Defaults to English ("en") if not specified.
+
+- `lang_restrict`: Restricts search results to specific languages. Refer to [Google languages](./static/json/google-lr-languages.json) for all available languages. 
+
+- `location`: Google encoded location you want to use for the search. Note: Using `uule` requires a special value format (Google's encrypted location format).
+
+- `fields`: Desired fields in the search results. Options include `title`, `link`, `displayed_link`, `favicon`, `snippet`, and `source`.
+
+<details>
+  <summary>📌 Example:</summary>
 
 ```python
-# Call the search function with the fields you want to filter with
-novexity, returned_gateway = search(
-    "Time", 'title', 'link')
+params = {
+    "q": "Minecraft",
+    "country": "fr",
+    "lang": "fr",
+    "fields": ["title", "link"]
+}
+
+# Initialize NovexitySearch with the parameters
+novexity_search = NovexitySearch(params)
 ```
 
-🌎 **Country-based Search**:
-
-To tailor the search results to a specific country, you can use the `country` parameter. Simply provide the country's ISO 3166-1 alpha-2 code, available from [World Data's country codes list](https://www.worlddata.info/countrycodes.php).
-
-```python
-# Call the search function with the country parameter
-novexity, returned_gateway = search(
-    "Time", country="fr")
-```
+</details>
 
 <h2 align="left">🤝 Contributing</h2>
 
