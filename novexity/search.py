@@ -19,6 +19,22 @@ config = Configuration()  # Initialize the configuration
 VALID_KEYS = {'title', 'link', 'displayed_link',
               'favicon', 'snippet', 'source'}
 
+invalid_titles = ["Description"]
+
+
+class NovexitySearch:
+    def __init__(self, params):
+        self.query = params.get("q")
+        self.country = params.get("country")
+        # default to English if not specified
+        self.lang = params.get("lang", "en")
+        self.lang_restrict = params.get("lang_restrict")
+        self.location = params.get("location")
+        self.fields = params.get("fields", [])
+
+    def get_dict(self):
+        return search(self.query, *self.fields, country=self.country, lang=self.lang, location=self.location)
+
 
 def configure(aws_access_key_id=None, aws_secret_access_key=None):
     """
@@ -47,7 +63,7 @@ def format_json_output(data):
     return json.dumps(data, indent=4, ensure_ascii=False)
 
 
-def search(query: str, *fields, country=None):
+def search(query: str, *fields, country=None, lang="en", location=None, lang_restrict=None):
     """
     Searches Google for a given query string and returns the organic search results.
 
@@ -81,11 +97,19 @@ def search(query: str, *fields, country=None):
     session = requests.Session()
     session.mount("https://www.google.com", gateway)
 
-    # Build the URL based on whether a country is specified or not
+    # URL building block
+    url = f"https://www.google.com/search?q={query}"
+
     if country:
-        url = f"https://www.google.com/search?q={query}&gl={country}"
-    else:
-        url = f"https://www.google.com/search?q={query}"
+        url += f"&gl={country}"
+    if lang:
+        url += f"&hl={lang}"
+    if lang_restrict:
+        url += f"&lr={lang_restrict}"
+    if location:
+        # Note: `uule` requires a special value format (Google's encrypted location format).
+        # This is just a placeholder.
+        url += f"&uule={location}"
 
     response = None
 
@@ -166,7 +190,7 @@ def search(query: str, *fields, country=None):
                     result_dict["source"] = source_element.get_text()
 
             # At least one essential field (like title or link) must be present
-            if result_dict.get("title") or result_dict.get("link"):
+            if (result_dict.get("title") or result_dict.get("link")) and result_dict.get("title") not in invalid_titles:
                 # Ensure that the result is unique (based on title and link)
                 if not any(existing_result.get("link") == result_dict.get("link") and
                            existing_result.get(
