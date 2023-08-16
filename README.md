@@ -163,7 +163,7 @@ To make your search more tailored, Novexity supports various parameters that you
 
 ✨ **Optional**:
 
-- `country`: Two-letter country code for Google search. (e.g., "us" for the United States, "uk" for United Kingdom, or "fr" for France). Check [Google countries](./static/json/google-countries.json) JSON for a full list.
+- `country`: Two-letter country code for Google search. (e.g., "us" for the United States, "uk" for United Kingdom, or "fr" for France). Check [Google countries](./static/json/google-countries.json) for a full list.
 
 - `lang`: Two-letter language code for Google search (e.g., en for English, es for Spanish, or fr for French). Refer to [Google languages](./static/json/google-languages.json) for all available languages. Defaults to English ("en") if not specified.
 
