@@ -1,0 +1,28 @@
+name: Novexity Checker
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # This will run the job at 00:00 every Sunday
+
+jobs:
+  check_novexity:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+
+      - name: Install Novexity
+        run: |
+          pip install Novexity
+
+      - name: Run Novexity example and check output
+        env:
+          GOOGLE_SEARCH_AWS_ACCESS_KEY_ID: ${{ secrets.GOOGLE_SEARCH_AWS_ACCESS_KEY_ID }}
+          GOOGLE_SEARCH_AWS_SECRET_ACCESS_KEY: ${{ secrets.GOOGLE_SEARCH_AWS_SECRET_ACCESS_KEY }}
+        run: python novexity_check.py
