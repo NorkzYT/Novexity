@@ -1,6 +1,7 @@
 name: Novexity Checker
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * 0' # This will run the job at 00:00 every Sunday
 
@@ -17,9 +18,9 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Novexity
+      - name: Install Novexity and dotenv
         run: |
-          pip install Novexity
+          pip install Novexity python-dotenv
 
       - name: Run Novexity example and check output
         env:
