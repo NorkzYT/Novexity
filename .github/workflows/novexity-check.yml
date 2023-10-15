@@ -20,7 +20,7 @@ jobs:
 
       - name: Install Novexity and dotenv
         run: |
-          pip install Novexity python-dotenv
+          pip install Novexity python-dotenv boto3
 
       - name: Run Novexity example and check output
         env:
