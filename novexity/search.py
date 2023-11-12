@@ -1,6 +1,6 @@
 import os
 import json
-from urllib.parse import unquote
+from urllib.parse import urlparse, parse_qs, unquote
 import requests
 from bs4 import BeautifulSoup
 from collections import OrderedDict
@@ -8,6 +8,10 @@ from .requests_ip_rotator.ip_rotator import ApiGateway
 
 
 class Configuration:
+    """
+    Configuration class to manage AWS access keys.
+    """
+
     def __init__(self):
         self.AWS_ACCESS_KEY_ID = os.getenv("GOOGLE_SEARCH_AWS_ACCESS_KEY_ID")
         self.AWS_ACCESS_KEY_SECRET = os.getenv("GOOGLE_SEARCH_AWS_SECRET_ACCESS_KEY")
@@ -15,22 +19,30 @@ class Configuration:
 
 config = Configuration()  # Initialize the configuration
 
+# Valid keys for search result fields
 VALID_KEYS = {"title", "link", "displayed_link", "favicon", "snippet", "source"}
 
+# Titles to be excluded from search results
 invalid_titles = ["Description"]
 
 
 class NovexitySearch:
+    """
+    Class for performing Novexity search with specified parameters.
+    """
+
     def __init__(self, params):
         self.query = params.get("q")
         self.country = params.get("country")
-        # default to English if not specified
         self.lang = params.get("lang", "en")
         self.lang_restrict = params.get("lang_restrict")
         self.location = params.get("location")
         self.fields = params.get("fields", [])
 
     def get_dict(self):
+        """
+        Method to initiate the search and return results.
+        """
         return search(
             self.query,
             *self.fields,
@@ -42,11 +54,7 @@ class NovexitySearch:
 
 def configure(aws_access_key_id=None, aws_secret_access_key=None):
     """
-    Configures the AWS keys for the search function.
-
-    Args:
-    - aws_access_key_id (str): AWS access key ID.
-    - aws_secret_access_key (str): AWS secret access key.
+    Configure AWS keys for the search function.
     """
     if aws_access_key_id:
         config.AWS_ACCESS_KEY_ID = aws_access_key_id
@@ -56,35 +64,44 @@ def configure(aws_access_key_id=None, aws_secret_access_key=None):
 
 def format_json_output(data):
     """
-    Formats data into a JSON string with specified parameters.
-
-    Args:
-    - data (dict): The data to be formatted.
-
-    Returns:
-    - str: Formatted JSON string.
+    Format data into a JSON string.
     """
     return json.dumps(data, indent=4, ensure_ascii=False)
+
+
+def clean_url(url):
+    """
+    Clean and extract the actual URL from the query string.
+    """
+    parsed = urlparse(url)
+    url_qs = parse_qs(parsed.query)
+    if "q" in url_qs:
+        return unquote(url_qs["q"][0])
+    elif "url" in url_qs:
+        return unquote(url_qs["url"][0])
+    return url
+
+
+def extract_snippet(result_item):
+    """
+    Extract snippet text from a search result item.
+    """
+    snippet_parts = result_item.select(
+        ".VwiC3b.yXK7lf.lyLwlc.yDYNvb.W8l4ac.lEBKkf span"
+    )
+    if snippet_parts:
+        return " ".join(part.get_text() for part in snippet_parts)
+    return ""
 
 
 def search(
     query: str, *fields, country=None, lang="en", location=None, lang_restrict=None
 ):
     """
-    Searches Google for a given query string and returns the organic search results.
-
-    Args:
-    - query (str): The search term or phrase to look up on Google.
-    - *fields (str): Fields you want in the results. Options include: 'title',
-                     'link', 'displayed_link', 'favicon', 'snippet', 'source'.
-
-    Returns:
-    - dict: A dictionary containing the organic search results based on the requested fields.
-
-    Raises:
-    - Returns an error dictionary if the search fails.
+    Perform a search query on Google and return the organic search results.
     """
-    # Check for the 'position' key and invalid keys:
+
+    # Validate field inputs
     if "position" in fields:
         return (
             format_json_output({"error": "The 'position' key is not a valid choice."}),
@@ -97,6 +114,7 @@ def search(
             None,
         )
 
+    # Prepare headers and gateway for the request
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64)"
         " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4454.0 Safari/537.36"
@@ -112,9 +130,8 @@ def search(
     session = requests.Session()
     session.mount("https://www.google.com", gateway)
 
-    # URL building block
+    # Construct search URL
     url = f"https://www.google.com/search?q={query}"
-
     if country:
         url += f"&gl={country}"
     if lang:
@@ -122,13 +139,12 @@ def search(
     if lang_restrict:
         url += f"&lr={lang_restrict}"
     if location:
-        # Note: `uule` requires a special value format (Google's encrypted location format).
-        # This is just a placeholder.
         url += f"&uule={location}"
 
     response = None
 
-    try:  # Start of the try block
+    # Attempt to get a valid response from Google
+    try:
         while True:
             try:
                 response = session.get(url, headers=headers)
@@ -157,7 +173,7 @@ def search(
 
         search_results = []
 
-        # Check which fields are requested
+        # Determine which fields to fetch based on input
         fetch_all = not bool(fields)
         fetch_position = "position" in fields or fetch_all
         fetch_title = "title" in fields or fetch_all
@@ -167,7 +183,6 @@ def search(
         fetch_snippet = "snippet" in fields or fetch_all
         fetch_source = "source" in fields or fetch_all
 
-        # If any of these fields are fetched, always include position
         if (
             any(
                 [
@@ -184,66 +199,45 @@ def search(
             fetch_position = True
 
         position = 0
-        for result in soup.select(".g"):
-            # Here we build the result_dict based on the fields requested:
+        for result in soup.select(".tF2Cxc"):
             result_dict = OrderedDict()
 
             if fetch_position:
                 position += 1
                 result_dict["position"] = position
 
-            if fetch_title and result.select_one("h3"):
-                result_dict["title"] = result.select_one("h3").get_text()
-            if fetch_link and result.select_one("a"):
-                anchor_tag = result.select_one("a")
-                if anchor_tag.has_attr("href"):
-                    result_dict["link"] = unquote(
-                        anchor_tag["href"].split("&")[0].replace("/url?q=", "")
-                    )
-            if fetch_displayed_link:
-                displayed_link_parts = result.select_one(".TbwUpd")
-                if displayed_link_parts:
-                    result_dict["displayed_link"] = " ".join(
-                        displayed_link_parts.stripped_strings
-                    )
-            if fetch_favicon and result.select_one(".eqA2re.NjwKYd img"):
-                result_dict["favicon"] = result.select_one(".eqA2re.NjwKYd img")["src"]
-            if fetch_snippet:
-                snippet_parts = result.select(
-                    ".VwiC3b.yXK7lf.lyLwlc.yDYNvb.W8l4ac.lEBKkf span"
-                )
+            # Extract information based on fields to fetch
+            if fetch_title:
+                title_element = result.select_one("h3")
+                if title_element:
+                    result_dict["title"] = title_element.get_text()
 
-                if snippet_parts:
-                    result_dict["snippet"] = " ".join(
-                        part.get_text() for part in snippet_parts
-                    )
+            if fetch_link:
+                link_element = result.select_one("a")
+                if link_element and link_element.has_attr("href"):
+                    result_dict["link"] = clean_url(link_element["href"])
+
+            if fetch_displayed_link:
+                displayed_link_element = result.select_one(".TbwUpd.NJjxre")
+                if displayed_link_element:
+                    result_dict["displayed_link"] = displayed_link_element.get_text()
+
+            if fetch_favicon:
+                favicon_element = result.select_one(".TbwUpd.NJjxre img")
+                if favicon_element:
+                    result_dict["favicon"] = favicon_element["src"]
+
+            if fetch_snippet:
+                result_dict["snippet"] = extract_snippet(result)
+
             if fetch_source:
                 source_element = result.select_one("cite")
                 if source_element:
                     result_dict["source"] = source_element.get_text()
 
-            # At least one essential field (like title or link) must be present
-            if (
-                result_dict.get("title") or result_dict.get("link")
-            ) and result_dict.get("title") not in invalid_titles:
-                # Ensure that the result is unique (based on title and link)
-                if not any(
-                    existing_result.get("link") == result_dict.get("link")
-                    and existing_result.get("title") == result_dict.get("title")
-                    for existing_result in search_results
-                ):
-                    search_results.append(result_dict)
+            if result_dict.get("title") not in invalid_titles:
+                search_results.append(result_dict)
 
-        # Reset the position values to ensure they are sequential
-        for idx, result in enumerate(search_results, 1):
-            result["position"] = idx
-
-        # Sort the search_results based on the position key
-        search_results = sorted(
-            search_results, key=lambda x: x.get("position", float("inf"))
-        )
-
-        # Create a dictionary to store the final JSON result
         json_result = {"organic_results": search_results}
 
         return format_json_output(json_result), gateway
