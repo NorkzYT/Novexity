@@ -6,6 +6,7 @@ Novexity.egg-info
 
 # Cache
 __pycache__
+venv
 
 # Environment variables
 .env

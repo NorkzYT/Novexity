@@ -40,33 +40,33 @@ Example usage:
 
 ```python
 import os
+import json
 from dotenv import load_dotenv
 from novexity import NovexitySearch, configure
+
 load_dotenv()
 
-AWS_ACCESS_KEY_ID = os.getenv('GOOGLE_SEARCH_AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('GOOGLE_SEARCH_AWS_SECRET_ACCESS_KEY')
-configure(aws_access_key_id=AWS_ACCESS_KEY_ID,
-          aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+AWS_ACCESS_KEY_ID = os.getenv("GOOGLE_SEARCH_AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("GOOGLE_SEARCH_AWS_SECRET_ACCESS_KEY")
+configure(
+    aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+)
 
-params = {
-    "q": "Minecraft",
-    "country": "fr",
-    "lang": "fr"
-}
+# Initialize API Gateway
+NovexitySearch.init_gateway()
 
-# Initialize NovexitySearch with the parameters
+params = {"q": "Minecraft", "country": "fr", "lang": "fr"}
+
+# Perform search
 novexity_search = NovexitySearch(params)
-
-# Get the search results
-novexity, returned_gateway = novexity_search.get_dict()
+search_results = novexity_search.get_dict()
 
 # Save the results to search.json
 with open("google-search.json", "w", encoding="utf-8") as file:
-    file.write(novexity)
+    file.write(json.dumps(search_results, indent=4))
 
-# Shut down the gateways
-returned_gateway.shutdown()
+# Shut down the API Gateway
+NovexitySearch.shutdown_gateway()
 ```
 
 ⚠️ Remember: If gateways are not shut down via the `shutdown()` method, you may incur charges.
@@ -167,7 +167,7 @@ To make your search more tailored, Novexity supports various parameters that you
 
 - `lang`: Two-letter language code for Google search (e.g., en for English, es for Spanish, or fr for French). Refer to [Google languages](./static/json/google-languages.json) for all available languages. Defaults to English ("en") if not specified.
 
-- `lang_restrict`: Restricts search results to specific languages. Refer to [Google languages](./static/json/google-lr-languages.json) for all available languages. 
+- `lang_restrict`: Restricts search results to specific languages. Refer to [Google languages](./static/json/google-lr-languages.json) for all available languages.
 
 - `location`: Google encoded location you want to use for the search. Note: Using `uule` requires a special value format (Google's encrypted location format).
 
