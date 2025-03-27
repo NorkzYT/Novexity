@@ -203,3 +203,13 @@ Every contribution is welcome! 💖
 <h2 align="left">📄 License</h2>
 
 This project is licensed under the MIT License. For more details, see [LICENSE](https://github.com/NorkzYT/Novexity/blob/master/LICENSE).
+
+## Star history
+
+<a href="https://star-history.com/#NorkzYT/BitwardenSync">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=NorkzYT/BitwardenSync&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=NorkzYT/BitwardenSync&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=NorkzYT/BitwardenSync&type=Date" />
+  </picture>
+</a>
